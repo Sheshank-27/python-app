@@ -1,21 +1,25 @@
 name: Deploy Application
 
 on:
+  push:
+    branches:
+      - main
+      - dev
+
   workflow_dispatch:
 
 jobs:
 
   deploy:
+    environment: ${{ github.ref_name }}
 
     uses: Sheshank-27/reusable-workflows/.github/workflows/ecs-ci-cd.yml@main
 
     with:
 
-      ecr_repository: python-app
-
-      ecs_cluster: devops-cluster
-
-      ecs_service: python-task-service
+      ecr_repository: ${{ vars.ECR_REPOSITORY }}
+      ecs_cluster: ${{ vars.ECS_CLUSTER }}
+      ecs_service: ${{ vars.ECS_SERVICE }}
 
       task_definition: python-task
 
